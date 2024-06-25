@@ -1,0 +1,19 @@
+<!-- api/templates/api_overview.html -->
+<html>
+<head>
+    <title>API Overview</title>
+</head>
+<body>
+    <h1>Drug Repurposing API Overview</h1>
+    <p>This API provides information about drugs, diseases, and their repurposing potential.</p>
+
+    <h2>Endpoints:</h2>
+    <ul>
+        {% for endpoint in endpoints %}
+            <li><a href="{{ endpoint.url }}">{{ endpoint.name }}</a></li>
+        {% endfor %}
+    </ul>
+</body>
+
+</html>
+
