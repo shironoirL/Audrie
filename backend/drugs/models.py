@@ -39,6 +39,7 @@ class Disease(models.Model):
     auroc = models.FloatField(blank=True, null=True)
     class Meta:
         db_table = 'disease'
+        ordering = ['doid']
 
     def __str__(self):
         return self.name
@@ -54,9 +55,11 @@ class DrugDiseaseProbability(models.Model):
     trial_count = models.IntegerField(default=0, blank=True) #Trials investigating this compound-disease pair in ClinicalTrials.gov
     class Meta:
         unique_together = (("drug", "disease"),)
+        ordering = ['drug', 'disease']
 
     class Meta:
         db_table = 'drug_disease_probability'
+        ordering = ['drug', 'disease']
 
     def __str__(self):
         return self.drug.name + " - " + self.disease.name
@@ -72,6 +75,7 @@ class PathPrediction(models.Model):
         return self.verbose_path
     class Meta:
         db_table = 'path_prediction'
+        ordering = ['-percent_of_prediction']
 
 class MetaPathPrediction(models.Model):
     drug_disease_probability = models.ForeignKey(DrugDiseaseProbability, on_delete=models.CASCADE)
@@ -82,6 +86,7 @@ class MetaPathPrediction(models.Model):
     verbose = models.CharField(max_length=300)
     class Meta:
         db_table = 'metapath_prediction'
+        ordering = ['-percent_of_prediction']
 
     def __str__(self):
         return self.verbose
@@ -94,6 +99,7 @@ class SourceEdgePrediction(models.Model):
     distinct_metapaths = models.IntegerField()
     class Meta:
         db_table = 'sourceedge_prediction'
+        ordering = ['-percent_of_prediction']
     def __str__(self):
         return self.source_edge
 
@@ -105,6 +111,7 @@ class TargetEdgePrediction(models.Model):
     distinct_metapaths = models.IntegerField()
     class Meta:
         db_table = 'targetedge_prediction'
+        ordering = ['-percent_of_prediction']
 
     def __str__(self):
         return self.target_edge
@@ -120,6 +127,7 @@ class DiseaseIndication(models.Model):
         return f"{self.chembl_id} - {self.disease}"
     class Meta:
         db_table = 'indication'
+        ordering = ['chembl_id']
 
 class MechanismOfAction(models.Model):
     action_type = models.CharField(max_length=100, blank=True, null=True)
@@ -134,4 +142,5 @@ class MechanismOfAction(models.Model):
         return f"{self.chembl_id} - {self.mechanism_of_action}"
     class Meta:
         db_table = 'mechanism_of_action'
+        ordering = ['chembl_id']
 
