@@ -1,3 +1,5 @@
+version: '3'
+
 services:
   postgres:
     image: postgres:16.1
@@ -21,12 +23,11 @@ services:
     ports:
       - "8000:8000"
     depends_on:
-       postgres:
-          condition: service_healthy
-
+      postgres:
+        condition: service_healthy
     volumes:
-      - ./backend:/backend
-      - static_volume:/static
+      - ./backend:/app
+      - static_volume:/app/static
     environment:
       DEBUG: "True"
       DB_NAME: drugs_db
@@ -47,6 +48,7 @@ services:
       - backend
     networks:
       - backend-network
+
   nginx:
     image: nginx:latest
     volumes:
@@ -59,6 +61,7 @@ services:
     depends_on:
       - backend
       - frontend
+
 volumes:
   pg_data:
   static_volume:
