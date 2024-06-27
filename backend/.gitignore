@@ -152,8 +152,6 @@ dmypy.json
 # Cython debug symbols
 cython_debug/
 .idea/
-drugs/migrations
-api/migrations
 /misc/
 /data/
 frontend/node_modules
