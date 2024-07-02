@@ -7,8 +7,6 @@ services:
       POSTGRES_PASSWORD: user
     ports:
       - "6543:5432"
-    networks:
-      - backend-network
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U drugs_db_admin -d drugs_db"]
       interval: 5s
@@ -34,8 +32,6 @@ services:
       DB_HOST: postgres
       DB_PORT: 5432
       SECRET_KEY: "secret"
-    networks:
-      - backend-network
 
   frontend:
     build:
@@ -44,8 +40,6 @@ services:
       - "3000:3000"
     depends_on:
       - backend
-    networks:
-      - backend-network
 
   nginx:
     image: nginx:latest
@@ -54,8 +48,6 @@ services:
       - static_volume:/static
     ports:
       - "80:80"
-    networks:
-      - backend-network
     depends_on:
       - backend
       - frontend
@@ -64,6 +56,3 @@ volumes:
   pg_data:
   static_volume:
 
-networks:
-  backend-network:
-    driver: bridge
