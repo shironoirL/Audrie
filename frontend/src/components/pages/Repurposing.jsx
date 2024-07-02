@@ -7,48 +7,23 @@ import MetapathPredictionTable from '../datatables/MetapathPredictionTable';
 import SourceEdgePredictionTable from '../datatables/SourceEdgePredictionTable';
 import TargetEdgePredictionTable from '../datatables/TargetEdgePredictionTable';
 
-const getAuthToken = () => {
-  return localStorage.getItem('auth_token');
+const getAuthToken = () => localStorage.getItem('auth_token');
+
+const fetchData = async (url, params) => {
+  const token = getAuthToken();
+  const headers = token ? { Authorization: `Token ${token}` } : {};
+  const response = await axios.get(url, { headers, params });
+  return response.data;
 };
 
 const fetchDrugDiseaseDetail = async ({ queryKey }) => {
-  const [_, drugName, diseaseName] = queryKey;
-  const token = getAuthToken();
-  const headers = token ? { Authorization: `Token ${token}` } : {};
-  const response = await axios.get(`/api/drug-diseases-probability/?search=${drugName}&disease=${diseaseName}`, { headers });
-  return response.data;
+  const [, drugName, diseaseName] = queryKey;
+  return fetchData('/api/drug-diseases-probability/', { search: `${drugName} ${diseaseName}` });
 };
 
-const fetchPathPredictions = async ({ queryKey }) => {
-  const [_, id] = queryKey;
-  const token = getAuthToken();
-  const headers = token ? { Authorization: `Token ${token}` } : {};
-  const response = await axios.get(`/api/path-predictions/?search=${id}`, { headers });
-  return response.data;
-};
-
-const fetchMetapathPredictions = async ({ queryKey }) => {
-  const [_, id] = queryKey;
-  const token = getAuthToken();
-  const headers = token ? { Authorization: `Token ${token}` } : {};
-  const response = await axios.get(`/api/metapath-predictions/?search=${id}`, { headers });
-  return response.data;
-};
-
-const fetchSourceEdgePredictions = async ({ queryKey }) => {
-  const [_, id] = queryKey;
-  const token = getAuthToken();
-  const headers = token ? { Authorization: `Token ${token}` } : {};
-  const response = await axios.get(`/api/source-edge-predictions/?search=${id}`, { headers });
-  return response.data;
-};
-
-const fetchTargetEdgePredictions = async ({ queryKey }) => {
-  const [_, id] = queryKey;
-  const token = getAuthToken();
-  const headers = token ? { Authorization: `Token ${token}` } : {};
-  const response = await axios.get(`/api/target-edge-predictions/?search=${id}`, { headers });
-  return response.data;
+const fetchPredictions = (url) => async ({ queryKey }) => {
+  const [, id] = queryKey;
+  return fetchData(url, { search: id });
 };
 
 const Repurposing = () => {
@@ -59,47 +34,82 @@ const Repurposing = () => {
     return <p className="text-center">Log in to inspect drug repurposing details</p>;
   }
 
-  const { data: drugDiseaseData, isLoading: isLoadingDrugDisease, error: errorDrugDisease } = useQuery({
+  const {
+    data: drugDiseaseData,
+    isLoading: isLoadingDrugDisease,
+    error: errorDrugDisease,
+  } = useQuery({
     queryKey: ['drugDiseaseDetail', drugName, diseaseName],
     queryFn: fetchDrugDiseaseDetail,
   });
 
-  const { data: pathPredictionData, isLoading: isLoadingPathPrediction, error: errorPathPrediction } = useQuery({
-    queryKey: ['pathPredictions', drugDiseaseData?.results?.[0]?.id],
-    queryFn: fetchPathPredictions,
-    enabled: !!drugDiseaseData?.results?.[0]?.id, // Only fetch if we have the id
+  const drugDiseaseId = drugDiseaseData?.results?.[0]?.id;
+
+  const {
+    data: pathPredictionData,
+    isLoading: isLoadingPathPrediction,
+    error: errorPathPrediction,
+  } = useQuery({
+    queryKey: ['pathPredictions', drugDiseaseId],
+    queryFn: fetchPredictions('/api/path-predictions/'),
+    enabled: !!drugDiseaseId,
   });
 
-  const { data: metapathPredictionData, isLoading: isLoadingMetapathPrediction, error: errorMetapathPrediction } = useQuery({
-    queryKey: ['metapathPredictions', drugDiseaseData?.results?.[0]?.id],
-    queryFn: fetchMetapathPredictions,
-    enabled: !!drugDiseaseData?.results?.[0]?.id, // Only fetch if we have the id
+  const {
+    data: metapathPredictionData,
+    isLoading: isLoadingMetapathPrediction,
+    error: errorMetapathPrediction,
+  } = useQuery({
+    queryKey: ['metapathPredictions', drugDiseaseId],
+    queryFn: fetchPredictions('/api/metapath-predictions/'),
+    enabled: !!drugDiseaseId,
   });
 
-  const { data: sourceEdgePredictionData, isLoading: isLoadingSourceEdgePrediction, error: errorSourceEdgePrediction } = useQuery({
-    queryKey: ['sourceEdgePredictions', drugDiseaseData?.results?.[0]?.id],
-    queryFn: fetchSourceEdgePredictions,
-    enabled: !!drugDiseaseData?.results?.[0]?.id, // Only fetch if we have the id
+  const {
+    data: sourceEdgePredictionData,
+    isLoading: isLoadingSourceEdgePrediction,
+    error: errorSourceEdgePrediction,
+  } = useQuery({
+    queryKey: ['sourceEdgePredictions', drugDiseaseId],
+    queryFn: fetchPredictions('/api/source-edge-predictions/'),
+    enabled: !!drugDiseaseId,
   });
 
-  const { data: targetEdgePredictionData, isLoading: isLoadingTargetEdgePrediction, error: errorTargetEdgePrediction } = useQuery({
-    queryKey: ['targetEdgePredictions', drugDiseaseData?.results?.[0]?.id],
-    queryFn: fetchTargetEdgePredictions,
-    enabled: !!drugDiseaseData?.results?.[0]?.id, // Only fetch if we have the id
+  const {
+    data: targetEdgePredictionData,
+    isLoading: isLoadingTargetEdgePrediction,
+    error: errorTargetEdgePrediction,
+  } = useQuery({
+    queryKey: ['targetEdgePredictions', drugDiseaseId],
+    queryFn: fetchPredictions('/api/target-edge-predictions/'),
+    enabled: !!drugDiseaseId,
   });
 
-  if (isLoadingDrugDisease || isLoadingPathPrediction || isLoadingMetapathPrediction || isLoadingSourceEdgePrediction || isLoadingTargetEdgePrediction) return <p className="text-center">Loading...</p>;
-  if (errorDrugDisease) return <p className="text-center text-red-500">Error: {errorDrugDisease.message}</p>;
-  if (errorPathPrediction) return <p className="text-center text-red-500">Error: {errorPathPrediction.message}</p>;
-  if (errorMetapathPrediction) return <p className="text-center text-red-500">Error: {errorMetapathPrediction.message}</p>;
-  if (errorSourceEdgePrediction) return <p className="text-center text-red-500">Error: {errorSourceEdgePrediction.message}</p>;
-  if (errorTargetEdgePrediction) return <p className="text-center text-red-500">Error: {errorTargetEdgePrediction.message}</p>;
+  if (
+    isLoadingDrugDisease ||
+    isLoadingPathPrediction ||
+    isLoadingMetapathPrediction ||
+    isLoadingSourceEdgePrediction ||
+    isLoadingTargetEdgePrediction
+  ) {
+    return <p className="text-center">Loading...</p>;
+  }
 
-  if (!drugDiseaseData || drugDiseaseData.results.length === 0) return <p className="text-center text-red-500">No data found for this combination</p>;
+  if (errorDrugDisease || errorPathPrediction || errorMetapathPrediction || errorSourceEdgePrediction || errorTargetEdgePrediction) {
+    const error =
+      errorDrugDisease ||
+      errorPathPrediction ||
+      errorMetapathPrediction ||
+      errorSourceEdgePrediction ||
+      errorTargetEdgePrediction;
+    return <p className="text-center text-red-500">Error: {error.message}</p>;
+  }
+
+  if (!drugDiseaseData || drugDiseaseData.results.length === 0) {
+    return <p className="text-center text-red-500">No data found for this combination</p>;
+  }
 
   const details = drugDiseaseData.results[0];
-
-  console.log('Details received:', details); // Debugging line
 
   return (
     <div className="container mx-auto py-4">

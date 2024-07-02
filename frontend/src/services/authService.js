@@ -2,7 +2,7 @@
 
 import axios from 'axios';
 
-const API_URL = 'http://backend:8000/api/auth/';
+const API_URL = 'backend:8000/api/auth/';
 
 const login = async (username, password) => {
     try {
