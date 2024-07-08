@@ -29,7 +29,7 @@ services:
       - ./backend:/app
       - static_volume:/app/static
     environment:
-      DEBUG: "True"
+      DEBUG: "False"
       DB_NAME: drugs_db
       DB_USER: drugs_db_admin
       DB_PASSWORD: user
