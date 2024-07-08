@@ -4,7 +4,6 @@ from drugs.models import Drug, Disease, DrugDiseaseProbability, PathPrediction, 
 from djoser.serializers import UserCreateSerializer as BaseUserCreateSerializer
 from .models import CustomUser
 
-
 class DrugSerializer(serializers.ModelSerializer):
     class Meta:
         model = Drug
@@ -15,18 +14,15 @@ class DiseaseSerializer(serializers.ModelSerializer):
         model = Disease
         fields = ['name']
 
-class DrugDiseaseProbabilitySerializer(serializers.ModelSerializer):
-    drug_name = serializers.StringRelatedField(source='drug')
-    disease_name = serializers.StringRelatedField(source='disease')
-
-    drug_name = serializers.CharField(source='drug')
-    disease_name = serializers.CharField(source='disease')
-    # drug = DrugSerializer()
-    # disease = DiseaseSerializer()
-
-    class Meta:
-        model = DrugDiseaseProbability
-        fields = ['drug_name','disease_name','id', 'prediction', 'compound_prediction', 'disease_prediction', 'category', 'trial_count']
+class DrugDiseaseProbabilitySerializer(serializers.Serializer):
+    id = serializers.IntegerField()
+    drug_name = serializers.CharField()
+    disease_name = serializers.CharField()
+    prediction = serializers.FloatField()
+    compound_prediction = serializers.FloatField()
+    disease_prediction = serializers.FloatField()
+    category = serializers.CharField()
+    trial_count = serializers.IntegerField()
 
 class BasePathPredictionSerializer(serializers.ModelSerializer):
     drug_disease_probability = DrugDiseaseProbabilitySerializer()
