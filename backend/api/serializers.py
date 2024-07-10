@@ -14,38 +14,44 @@ class DiseaseSerializer(serializers.ModelSerializer):
         model = Disease
         fields = ['name']
 
-class DrugDiseaseProbabilitySerializer(serializers.ModelSerializer):
-    drug_name = serializers.StringRelatedField(source='drug')
-    disease_name = serializers.StringRelatedField(source='disease')
-    drug_name = serializers.CharField(source='drug')
-    disease_name = serializers.CharField(source='disease')
-
-    class Meta:
-        model = DrugDiseaseProbability
-        fields = ['drug_name', 'disease_name', 'id', 'prediction', 'compound_prediction', 'disease_prediction', 'category', 'trial_count']
+class DrugDiseaseProbabilitySerializer(serializers.Serializer):
+    id = serializers.IntegerField()
+    drug_name = serializers.CharField()
+    disease_name = serializers.CharField()
+    prediction = serializers.FloatField()
+    compound_prediction = serializers.FloatField()
+    disease_prediction = serializers.FloatField()
+    category = serializers.CharField()
+    trial_count = serializers.IntegerField()
 
 class BasePathPredictionSerializer(serializers.ModelSerializer):
     drug_disease_probability = DrugDiseaseProbabilitySerializer()
 
-class PathPredictionSerializer(BasePathPredictionSerializer):
-    class Meta:
-        model = PathPrediction
-        fields = ['drug_disease_probability', 'percent_of_prediction', 'percent_of_dwpc', 'metapath', 'length', 'verbose_path']
+class PathPredictionSerializer(serializers.Serializer):
+    percent_of_prediction = serializers.FloatField()
+    percent_of_dwpc = serializers.FloatField()
+    metapath = serializers.CharField(max_length=255)
+    length = serializers.IntegerField()
+    verbose_path = serializers.CharField(max_length=255)
 
-class MetaPathPredictionSerializer(BasePathPredictionSerializer):
-    class Meta:
-        model = MetaPathPrediction
-        fields = ['drug_disease_probability', 'metapath', 'percent_of_prediction', 'path_count', 'length', 'verbose']
+class MetapathPredictionSerializer(serializers.Serializer):
+    metapath = serializers.CharField(max_length=255)
+    percent_of_prediction = serializers.FloatField()
+    path_count = serializers.IntegerField()
+    length = serializers.IntegerField()
+    verbose = serializers.CharField(max_length=255)
 
-class SourceEdgePredictionSerializer(BasePathPredictionSerializer):
-    class Meta:
-        model = SourceEdgePrediction
-        fields = ['drug_disease_probability', 'source_edge', 'percent_of_prediction', 'path_count', 'distinct_metapaths']
+class SourceEdgePredictionSerializer(serializers.Serializer):
+    source_edge = serializers.CharField(max_length=255)
+    percent_of_prediction = serializers.FloatField()
+    path_count = serializers.IntegerField()
+    distinct_metapaths = serializers.IntegerField()
 
-class TargetEdgePredictionSerializer(BasePathPredictionSerializer):
-    class Meta:
-        model = TargetEdgePrediction
-        fields = ['drug_disease_probability', 'target_edge', 'percent_of_prediction', 'path_count', 'distinct_metapaths']
+class TargetEdgePredictionSerializer(serializers.Serializer):
+    target_edge = serializers.CharField(max_length=255)
+    percent_of_prediction = serializers.FloatField()
+    path_count = serializers.IntegerField()
+    distinct_metapaths = serializers.IntegerField()
 
 class IndicationSerializer(serializers.ModelSerializer):
     drug_name = serializers.StringRelatedField(source='chembl_id')
