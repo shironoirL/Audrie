@@ -17,6 +17,11 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.pagination import PageNumberPagination
 from django.http import JsonResponse
+from django.shortcuts import render
+from django.contrib.auth.tokens import default_token_generator
+from django.utils.http import urlsafe_base64_decode
+from django.contrib.auth import get_user_model
+from django.http import HttpResponse
 
 class BaseListView(generics.ListAPIView):
     filter_backends = [filters.SearchFilter]
@@ -69,7 +74,7 @@ class CachedAPIView(APIView):
         # Log the error for debugging
         print(f'Error executing SQL query: {e}')
         return JsonResponse({'error': str(e)}, status=500)
-
+    permission_classes = [IsAuthenticated]
     def build_search_sql(self, search_query, fields):
         if not search_query:
             return '', []
@@ -230,3 +235,23 @@ def api_overview(request):
         ]
     }
     return render(request, 'api_overview.html', context)
+
+##########
+
+User = get_user_model()
+
+def activate_user(request, uidb64, token):
+    try:
+        uid = urlsafe_base64_decode(uidb64).decode()
+        user = User.objects.get(pk=uid)
+    except (TypeError, ValueError, OverflowError, User.DoesNotExist):
+        user = None
+
+    if user is not None and default_token_generator.check_token(user, token):
+        user.is_active = True
+        user.save()
+        return HttpResponse('Your account has been activated successfully!')
+    else:
+        return HttpResponse('Activation link is invalid!')
+
+

@@ -18,11 +18,11 @@ const Login = () => {
         password
       });
       if (response.data.auth_token) {
-        login(username, response.data.auth_token);
+        login(response.data.auth_token);
         setMessage('Login successful');
         navigate('/'); // Redirect to home or another page
       } else {
-        setMessage('Login failed: ' + response.data.non_field_errors.join(', '));
+        setMessage('Login failed: ' + (response.data.non_field_errors ? response.data.non_field_errors.join(', ') : 'Unknown error'));
       }
     } catch (error) {
       console.error('Error logging in:', error);
@@ -56,6 +56,14 @@ const Login = () => {
           Login
         </button>
         {message && <p className="mt-3 text-center text-red-500">{message}</p>}
+        <div className="mt-4 text-center">
+          <a
+            href="/forgot-password"
+            className="text-blue-500 hover:underline"
+          >
+            Forgot Password?
+          </a>
+        </div>
       </form>
     </div>
   );

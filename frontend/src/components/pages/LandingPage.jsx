@@ -24,11 +24,11 @@ const LandingPage = () => {
 
   return (
     <div className="landing-page">
-      <ParticlesBackground /> {/* Add the particles background */}
+      <ParticlesBackground />
       <div className="content">
         <div className="logo-container">
-          <img src={Logo} alt="Logo" className="logo" /> {/* Add the logo */}
-          <h1 className="title">AUDRIE</h1> {/* Add the AUDRIE text */}
+          <img src={Logo} alt="Logo" className="logo" />
+          <h1 className="title">AUDRIE</h1>
         </div>
         <form onSubmit={handleSearch} className="search-form">
           <input

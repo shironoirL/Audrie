@@ -1,6 +1,7 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from './utils/AuthContext.jsx';
+import Logo from './logo/img.svg';
 
 const Navigation = () => {
   const { authState, logout } = useAuth();
@@ -17,6 +18,7 @@ const Navigation = () => {
       <nav className="bg-gradient-to-r from-indigo-500 via-blue-300 to-blue-100 border-gray-200 px-4 lg:px-6 py-2 dark:bg-gray-800 w-full">
         <div className="flex flex-wrap justify-between items-center mx-auto max-w-screen-xl w-full">
           <a href="/" className="flex items-center">
+            <img src={Logo} className="h-12 mr-3" alt="Logo" />
             <span className="self-center text-xl font-semibold whitespace-nowrap dark:text-white hover:text-indigo-600">AUDRiE</span>
           </a>
           <div className="flex items-center lg:order-2">
@@ -33,17 +35,17 @@ const Navigation = () => {
             </form>
             {username ? (
               <>
-                <span className="block py-2 pr-4 pl-6 ml-6 text-gray-700 border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 lg:hover:text-primary-700 lg:p-0 dark:text-gray-400 dark:hover:text-white lg:dark:hover:text-indigo-600 dark:hover:bg-gray-700 dark:hover:text-indigo-600 lg:dark:hover:bg-transparent dark:border-gray-700 hover:text-indigo-600">
-                  Logged as {username}
-                </span>
-                <button onClick={handleLogout} className="ml-4 block py-2 pr-4 pl-3 text-gray-700 border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 lg:hover:text-primary-700 lg:p-0 dark:text-gray-400 lg:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-indigo-600 lg:dark:hover:bg-transparent dark:border-gray-700 hover:text-indigo-600">
+                <a href="/profile" className="text-black bg-primary-700 ml-4 hover:bg-primary-800 hover:text-indigo-600">
+                  {username}
+                </a>
+                <button onClick={handleLogout} className="text-black bg-primary-700 ml-4 hover:bg-primary-800 hover:text-indigo-600">
                   Logout
                 </button>
               </>
             ) : (
               <>
-                <a href="/login" className="text-gray-700 bg-primary-700 ml-4 hover:bg-primary-800 hover:text-indigo-600">Login</a>
-                <a href="/register" className="text-gray-700 bg-primary-700 ml-4 hover:bg-primary-800 hover:text-indigo-600">Register</a>
+                <a href="/login" className="text-black bg-primary-700 ml-4 hover:bg-primary-800 hover:text-indigo-600">Login</a>
+                <a href="/register" className="text-black bg-primary-700 ml-4 hover:bg-primary-800 hover:text-indigo-600">Register</a>
               </>
             )}
             <button data-collapse-toggle="mobile-menu-2" type="button" className="inline-flex items-center p-2 ml-1 text-sm text-gray-500 rounded-lg lg:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600 hover:text-indigo-600">
@@ -53,15 +55,12 @@ const Navigation = () => {
             </button>
           </div>
           <div className="hidden justify-between items-center w-full lg:flex lg:w-auto lg:order-1" id="mobile-menu-2">
-            <ul className="flex flex-col mt-4 font-medium lg:flex-row lg:space-x-8 lg:mt-0">
+            <ul className="flex flex-col mt-4 font-medium lg:space-x-8 font-medium lg:flex-row lg:space-x-8 lg:mt-0">
               <li>
-                <a href="/" className="block py-2 pr-4 pl-3 text-white rounded bg-primary-700 lg:bg-transparent lg:text-primary-700 lg:p-0 dark:text-white hover:text-indigo-600" aria-current="page">Home</a>
+                <a href="/drugs" className="text-black bg-primary-700 hover:bg-primary-800 hover:text-indigo-600">Compounds</a>
               </li>
               <li>
-                <a href="/drugs" className="block py-2 pr-4 pl-3 text-gray-700 border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 lg:hover:text-primary-700 lg:p-0 dark:text-gray-400 lg:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-indigo-600 lg:dark:hover:bg-transparent dark:border-gray-700 hover:text-indigo-600">Drugs</a>
-              </li>
-              <li>
-                <a href="https://audrie.tilda.ws/" className="text-gray-700 bg-primary-700 ml-4 hover:bg-primary-800 hover:text-indigo-600">About</a>
+                <a href="https://audrie.tilda.ws/" className="text-black bg-primary-700 ml-4 hover:bg-primary-800 hover:text-indigo-600">About</a>
               </li>
             </ul>
           </div>

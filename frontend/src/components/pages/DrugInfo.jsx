@@ -14,6 +14,65 @@ const fetchDrugDetail = async (drugName) => {
   return response.data;
 };
 
+const removeSquareBrackets = (text) => {
+  return text.replace(/\[.*?\]/g, '');
+};
+
+const removeHTMLTags = (text) => {
+  return text.replace(/<\/?[^>]+(>|$)/g, '');
+};
+
+const fixEncoding = (text) => {
+  const misencodedChars = {
+    'â': '’',
+    'â': '“',
+    'â': '”',
+    'â¢': '•',
+    'â¢': '•',
+    'â¢': '•',
+    'â¬': '€',
+    'â': '∂',
+    'â': '∑',
+    'â': '∏',
+    'â': '≈',
+    'â ': '≠',
+    'â': '∞',
+    'â¤': '≤',
+    'â¥': '≥',
+    'Î±': 'α',
+    'Î²': 'β',
+    'Î³': 'γ',
+    'Î´': 'δ',
+    'Îµ': 'ε',
+    'Î¶': 'ζ',
+    'Î·': 'η',
+    'Î¸': 'θ',
+    'Î¹': 'ι',
+    'Îº': 'κ',
+    'Î»': 'λ',
+    'Î¼': 'μ',
+    'Î½': 'ν',
+    'Î¾': 'ξ',
+    'Î¿': 'ο',
+    'Îπ': 'π',
+    'Î¿Ï': 'ρ',
+    'Ï': 'σ',
+    'Ï': 'τ',
+    'Ï': 'υ',
+    'Ï': 'φ',
+    'Ï': 'χ',
+    'Ï': 'ψ',
+    'Ï': 'ω',
+    'Â': ' ',
+  };
+
+  return text.replace(/â|â|â|â¢|â¢|â¬|â|â|â|â|â |â|â¤|â¥|Î±|Î²|Î³|Î´|Îµ|Î¶|Î·|Î¸|Î¹|Îº|Î»|Î¼|Î½|Î¾|Î¿|Îπ|Î¿Ï|Ï|Ï|Ï|Ï|Ï|Ï|Ï|Â/g, match => misencodedChars[match] || match);
+};
+
+const cleanText = (text) => {
+  return fixEncoding(removeHTMLTags(removeSquareBrackets(text)));
+};
+
 const DrugInfo = ({ drugName }) => {
   const { data: drugData, isLoading, error } = useQuery({
     queryKey: ['drugDetail', drugName],
@@ -45,8 +104,8 @@ const DrugInfo = ({ drugName }) => {
 
   return (
     <div className="p-4 border rounded shadow">
-      <p><strong>Description:</strong> {drugData.description}</p>
-      <p className="mt-4"><strong>Mechanism:</strong> {drugData.mechanism_large}</p>
+      <p><strong>Description:</strong> {cleanText(drugData.description)}</p>
+      <p className="mt-4"><strong>Mechanism:</strong> {cleanText(drugData.mechanism_large)}</p>
       <p className="mt-4"><strong>Group:</strong></p>
       <div className="flex flex-wrap gap-2 mt-2">
         {groups.map((group, index) => (
@@ -95,11 +154,11 @@ const DrugInfo = ({ drugName }) => {
         ))}
       </div>
       <p className="mt-4"><strong>Inchikey:</strong> {drugData.inchikey}</p>
-      <p className="mt-4"><strong>Pharmacodynamics:</strong> {drugData.pharmacodynamics}</p>
-      <p className="mt-4"><strong>Toxicity:</strong> {drugData.toxicity}</p>
-      <p className="mt-4"><strong>Clearance:</strong> {drugData.clearance}</p>
-      <p className="mt-4"><strong>Route of elimination:</strong> {drugData.route_of_elimination}</p>
-      <p className="mt-4"><strong>Metabolism:</strong> {drugData.metabolism}</p>
+      <p className="mt-4"><strong>Pharmacodynamics:</strong> {cleanText(drugData.pharmacodynamics)}</p>
+      <p className="mt-4"><strong>Toxicity:</strong> {cleanText(drugData.toxicity)}</p>
+      <p className="mt-4"><strong>Clearance:</strong> {cleanText(drugData.clearance)}</p>
+      <p className="mt-4"><strong>Route of elimination:</strong> {cleanText(drugData.route_of_elimination)}</p>
+      <p className="mt-4"><strong>Metabolism:</strong> {cleanText(drugData.metabolism)}</p>
       <p className="mt-4"><strong>smiles:</strong> {drugData.smiles}</p>
     </div>
   );

@@ -112,16 +112,22 @@ REST_FRAMEWORK = {
     ),
 }
 
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = os.getenv('EMAIL_HOST')
+EMAIL_PORT = os.getenv('EMAIL_PORT')
+EMAIL_USE_TLS = os.getenv('EMAIL_USE_TLS')
+EMAIL_USE_SSL = os.getenv('EMAIL_USE_SSL')
+EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
+
 DJOSER = {
     'LOGIN_FIELD': 'username',
     'USER_CREATE_PASSWORD_RETYPE': True,
-    # 'USERNAME_CHANGED_EMAIL_CONFIRMATION': True,
-    # 'PASSWORD_CHANGED_EMAIL_CONFIRMATION': True,
-    # 'SEND_CONFIRMATION_EMAIL': True,
-    # 'PASSWORD_RESET_CONFIRM_URL': 'password/reset/confirm/{uid}/{token}',
-    # 'ACTIVATION_URL': 'activate/{uid}/{token}',
-    # 'SEND_ACTIVATION_EMAIL': True,
-    'SERIALIZERS': {},
+    'SEND_ACTIVATION_EMAIL': True,
+    'PASSWORD_RESET_CONFIRM_URL': 'api/password/reset/confirm/{uid}/{token}',
+    'ACTIVATION_URL': 'api/activate/{uid}/{token}',
+    'SERIALIZERS': {
+    },
 }
 
 # Internationalization

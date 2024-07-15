@@ -3,7 +3,7 @@ from .views import (
     DrugListView, DrugDetailView, DiseaseListView, DrugDiseaseProbabilityListView,
     api_overview, PathPredictionListView, MetaPathPredictionListView,
     SourceEdgePredictionListView, TargetEdgePredictionListView, IndicationListView,
-    MechanismOfActionListView
+    MechanismOfActionListView, activate_user
 )
 
 urlpatterns = [
@@ -19,5 +19,7 @@ urlpatterns = [
     path('indication/', IndicationListView.as_view(), name='indications'),
     path('mechanism-of-action/', MechanismOfActionListView.as_view(), name='mechanism-of-action'),
     path('auth/', include('djoser.urls')),
+    path('auth/', include('djoser.urls.jwt')),
     path('auth/', include('djoser.urls.authtoken')),
+    path('activate/<uidb64>/<token>/', activate_user, name='activate'),
 ]

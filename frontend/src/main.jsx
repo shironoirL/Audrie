@@ -8,11 +8,13 @@ import SearchResults from './components/pages/SearchResults.jsx';
 import LandingPage from './components/pages/LandingPage.jsx'; // Import the new landing page
 import Login from './components/pages/Login.jsx';
 import Register from './components/pages/Register.jsx';
+import Activate from './components/pages/Activate.jsx';
 import './index.css';
 import { QueryClientProvider, QueryClient } from '@tanstack/react-query';
 import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 import { AuthProvider } from './components/utils/AuthContext.jsx';
-
+import Profile from './components/pages/Profile.jsx';
+import ForgotPassword from "./components/pages/ForgotPassword.jsx";
 const router = createBrowserRouter([
   {
     path: '/',
@@ -21,6 +23,18 @@ const router = createBrowserRouter([
       {
         path: '/',
         element: <LandingPage />,
+      },
+      {
+        path: '/forgot-password',
+        element: <ForgotPassword />,
+      },
+      {
+        path: '/activate/:uid/:token',
+        element: <Activate />,
+      },
+      {
+        path: '/profile',
+        element: <Profile />,
       },
       {
         path: '/drugs',

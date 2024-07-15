@@ -16,15 +16,28 @@ const Register = () => {
     }
 
     try {
-      const response = await axios.post('/api/auth/users/', {
+      // Register the user
+      await axios.post('/api/auth/users/', {
         email,
         username,
         password,
         re_password: confirmPassword
       });
-      setMessage('Registration successful');
+
+      // Set the success message
+      setMessage('Registration successful. A link to activate your account has been sent to your email.');
     } catch (error) {
-      setMessage('Registration failed: ' + error.response.data);
+      if (error.response && error.response.data) {
+        const errors = error.response.data;
+        let errorMessage = '';
+
+        for (const value of Object.values(errors)) {
+          errorMessage += `${value.join('\n')}\n`;
+        }
+        setMessage(errorMessage.trim());
+      } else {
+        setMessage('Registration failed');
+      }
     }
   };
 
@@ -34,18 +47,18 @@ const Register = () => {
         <h1 className="text-2xl font-bold text-center">Register</h1>
         <div className="space-y-2">
           <input
-            type="email"
-            placeholder="Email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            className="w-full px-3 py-2 border rounded"
-            required
-          />
-          <input
             type="text"
             placeholder="Username"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
+            className="w-full px-3 py-2 border rounded"
+            required
+          />
+          <input
+            type="email"
+            placeholder="Email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
             className="w-full px-3 py-2 border rounded"
             required
           />
@@ -69,7 +82,7 @@ const Register = () => {
         <button type="submit" className="w-full px-3 py-2 text-white bg-blue-500 rounded hover:bg-blue-700">
           Register
         </button>
-        {message && <p className="mt-3 text-center text-red-500">{message}</p>}
+        {message && <p className="mt-3 text-center text-red-500 whitespace-pre-line">{message}</p>}
       </form>
     </div>
   );
