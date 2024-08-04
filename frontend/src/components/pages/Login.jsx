@@ -56,14 +56,6 @@ const Login = () => {
           Login
         </button>
         {message && <p className="mt-3 text-center text-red-500">{message}</p>}
-        <div className="mt-4 text-center">
-          <a
-            href="/forgot-password"
-            className="text-blue-500 hover:underline"
-          >
-            Forgot Password?
-          </a>
-        </div>
       </form>
     </div>
   );
