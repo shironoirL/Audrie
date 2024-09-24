@@ -2,6 +2,7 @@ from django.shortcuts import render
 from dal import autocomplete
 from .models import DrugDiseaseProbability
 
+
 class PathPredictionAutocomplete(autocomplete.Select2QuerySetView):
     def get_queryset(self):
         qs = DrugDiseaseProbability.objects.all()
@@ -11,6 +12,6 @@ class PathPredictionAutocomplete(autocomplete.Select2QuerySetView):
 
         return qs
 
+
 def home(request):
-    return render(request, 'home.html')
-# Create your views here.
+    return render(request, "home.html")
