@@ -14,17 +14,17 @@ const PathPredictionTable = ({ data }) => {
     if (!token) return;
 
     if (data && data.results.length > 0) {
-      console.log('Data received for Path Prediction Table:', data); // Debugging line
+      console.log('Data received for Path Prediction Table:', data);
 
       const formattedData = data.results.map(item => ({
-        metapath: item.metapath || 'Unknown', // Default to 'Unknown' if metapath is undefined
+        metapath: item.metapath || 'Unknown',
         percent_of_prediction: item.percent_of_prediction ? item.percent_of_prediction.toFixed(2) : 'N/A',
         percent_of_dwpc: item.percent_of_dwpc ? item.percent_of_dwpc.toFixed(2) : 'N/A',
         length: item.length ? item.length : 'N/A',
         verbose_path: item.verbose_path || 'Unknown',
       }));
 
-      console.log('Formatted data for DataTables:', formattedData); // Debugging line
+      console.log('Formatted data for DataTables:', formattedData);
 
       $('#pathPredictionTable').DataTable({
         destroy: true,

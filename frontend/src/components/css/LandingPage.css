@@ -7,7 +7,7 @@ body, html {
 }
 
 body.non-scrollable {
-  overflow: hidden; /* Prevents scrolling */
+  overflow: hidden;
 }
 
 * {
@@ -19,9 +19,9 @@ body.non-scrollable {
   height: 100vh;
   display: flex;
   justify-content: center;
-  align-items: center; /* Center elements vertically */
+  align-items: center;
   position: relative;
-  overflow: hidden; /* Prevents scrolling within the landing page */
+  overflow: hidden;
 }
 
 .particles-canvas {
@@ -30,7 +30,7 @@ body.non-scrollable {
   left: 0;
   width: 100%;
   height: 100%;
-  z-index: 0; /* Ensure it's in the background */
+  z-index: 0;
 }
 
 .content {
@@ -39,8 +39,8 @@ body.non-scrollable {
   align-items: center;
   z-index: 2;
   text-align: center;
-  color: #000; /* Adjust text color as needed */
-  margin-top: -170px; /* Adjust this value to position the elements higher */
+  color: #000;
+  margin-top: -170px;
 }
 
 .logo-container {
@@ -50,14 +50,14 @@ body.non-scrollable {
 }
 
 .logo {
-  width: 100px; /* Adjust width as needed */
-  margin-right: 20px; /* Space between logo and text */
+  width: 100px;
+  margin-right: 20px;
 }
 
 .title {
   font-size: 4rem;
   font-weight: bold;
-  color: #000; /* Adjust text color as needed */
+  color: #000;
 }
 
 .search-form {

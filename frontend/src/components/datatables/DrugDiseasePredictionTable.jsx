@@ -26,7 +26,7 @@ const fetchAllPagesConcurrently = async (url, totalPages) => {
 
 const fetchDiseaseProbability = async (drugName) => {
   const initialUrl = `/api/drug-diseases-probability/?search=${drugName}`;
-  const totalPages = 7; // Specify the total number of pages
+  const totalPages = 7;
   return fetchAllPagesConcurrently(initialUrl, totalPages);
 };
 

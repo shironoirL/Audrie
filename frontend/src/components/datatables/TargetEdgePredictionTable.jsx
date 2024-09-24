@@ -14,16 +14,16 @@ const TargetEdgePredictionTable = ({ data }) => {
     if (!token) return;
 
     if (data && data.results.length > 0) {
-      console.log('Data received for Target Edge Prediction Table:', data); // Debugging line
+      console.log('Data received for Target Edge Prediction Table:', data);
 
       const formattedData = data.results.map(item => ({
-        target_edge: item.target_edge || 'Unknown', // Default to 'Unknown' if target_edge is undefined
+        target_edge: item.target_edge || 'Unknown',
         percent_of_prediction: item.percent_of_prediction ? item.percent_of_prediction.toFixed(2) : 'N/A',
         path_count: item.path_count ? item.path_count : 'N/A',
         distinct_metapaths: item.distinct_metapaths ? item.distinct_metapaths : 'N/A',
       }));
 
-      console.log('Formatted data for DataTables:', formattedData); // Debugging line
+      console.log('Formatted data for DataTables:', formattedData);
 
       $('#targetEdgePredictionTable').DataTable({
         destroy: true,
